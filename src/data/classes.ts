@@ -1,0 +1,117 @@
+export const classData = {
+  classes: [
+    {
+      id: 'room-201',
+      name: 'Room 201',
+      students: [
+        {
+          id: 's1',
+          name: 'Ali',
+          scores: {math: 75, english: 80, science: 98}
+        },
+        {
+          id: 's2',
+          name: 'Zara',
+          scores: {math: 68, english: 72, science: 70}
+        },
+        {
+          id: 's3',
+          name: 'Bilal',
+          scores: {math: 82, english: 76, science: 84}
+        },
+        {
+          id: 's4',
+          name: 'Fatima',
+          scores: {math: 60, english: 64, science: 66}
+        },
+        {
+          id: 's5',
+          name: 'Usman',
+          scores: {math: 70, english: 68, science: 72}
+        },
+        {
+          id: 's6',
+          name: 'Aisha',
+          scores: {math: 77, english: 73, science: 80}
+        },
+        {
+          id: 's7',
+          name: 'Hamza',
+          scores: {math: 64, english: 70, science: 75}
+        },
+        {
+          id: 's8',
+          name: 'Noor',
+          scores: {math: 69, english: 71, science: 78}
+        },
+        {
+          id: 's9',
+          name: 'Yousuf',
+          scores: {math: 72, english: 66, science: 74}
+        },
+        {
+          id: 's10',
+          name: 'Sana',
+          scores: {math: 76, english: 74, science: 82}
+        }
+      ]
+    },
+    {
+      id: 'room-202',
+      name: 'Room 202',
+      students: [
+        {
+          id: 's11',
+          name: 'Rehan',
+          scores: {math: 80, english: 84, science: 88}
+        },
+        {
+          id: 's12',
+          name: 'Mehak',
+          scores: {math: 78, english: 76, science: 85}
+        },
+        {
+          id: 's13',
+          name: 'Ahmed',
+          scores: {math: 82, english: 80, science: 87}
+        },
+        {
+          id: 's14',
+          name: 'Laiba',
+          scores: {math: 76, english: 79, science: 82}
+        },
+        {
+          id: 's15',
+          name: 'Tariq',
+          scores: {math: 84, english: 77, science: 80}
+        },
+        {
+          id: 's16',
+          name: 'Hiba',
+          scores: {math: 75, english: 74, science: 79}
+        },
+        {
+          id: 's17',
+          name: 'Salman',
+          scores: {math: 79, english: 81, science: 86}
+        },
+        {
+          id: 's18',
+          name: 'Iqra',
+          scores: {math: 73, english: 75, science: 78}
+        },
+        {
+          id: 's19',
+          name: 'Junaid',
+          scores: {math: 70, english: 72, science: 75}
+        },
+        {
+          id: 's20',
+          name: 'Sadia',
+          scores: {math: 85, english: 88, science: 90}
+        }
+      ]
+    }
+  ],
+  subjects: ['math', 'english', 'science']
+};

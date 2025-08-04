@@ -8,12 +8,13 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-  SortingState
+  SortingState,
+  getFilteredRowModel
 } from '@tanstack/react-table';
 import {z} from 'zod';
 
 import {Button} from '@/components/ui/button';
-import {Input} from '@/components/ui/input'; // Assuming you have this for search
+import {Input} from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -28,11 +29,10 @@ import {
   IconChevronRight,
   IconChevronsLeft,
   IconChevronsRight,
-  IconSearch // Added for search input
-} from '@tabler/icons-react'; // Added for pagination icons
+  IconSearch
+} from '@tabler/icons-react';
 import {Card, CardContent, CardHeader, CardTitle} from './ui/card';
 
-// --- 1. Define Student Schemas ---
 export const studentScoresSchema = z.object({
   math: z.number(),
   english: z.number(),
@@ -48,82 +48,6 @@ export const studentSchema = z.object({
   roomName: z.string().optional()
 });
 
-// --- 2. Prepare the Student Data ---
-// const rawStudentData = {
-//   classes: [
-//     {
-//       id: 'room-201',
-//       name: 'Room 201',
-//       students: [
-//         {id: 's1', name: 'Ali', scores: {math: 75, english: 80, science: 88}},
-//         {id: 's2', name: 'Zara', scores: {math: 68, english: 72, science: 70}},
-//         {id: 's3', name: 'Bilal', scores: {math: 82, english: 76, science: 84}},
-//         {
-//           id: 's4',
-//           name: 'Fatima',
-//           scores: {math: 60, english: 64, science: 66}
-//         },
-//         {id: 's5', name: 'Usman', scores: {math: 70, english: 68, science: 72}},
-//         {id: 's6', name: 'Aisha', scores: {math: 77, english: 73, science: 80}},
-//         {id: 's7', name: 'Hamza', scores: {math: 64, english: 70, science: 75}},
-//         {id: 's8', name: 'Noor', scores: {math: 69, english: 71, science: 78}},
-//         {
-//           id: 's9',
-//           name: 'Yousuf',
-//           scores: {math: 72, english: 66, science: 74}
-//         },
-//         {id: 's10', name: 'Sana', scores: {math: 76, english: 74, science: 82}}
-//       ]
-//     },
-//     {
-//       id: 'room-202',
-//       name: 'Room 202',
-//       students: [
-//         {
-//           id: 's11',
-//           name: 'Rehan',
-//           scores: {math: 80, english: 84, science: 88}
-//         },
-//         {
-//           id: 's12',
-//           name: 'Mehak',
-//           scores: {math: 78, english: 76, science: 85}
-//         },
-//         {
-//           id: 's13',
-//           name: 'Ahmed',
-//           scores: {math: 82, english: 80, science: 87}
-//         },
-//         {
-//           id: 's14',
-//           name: 'Laiba',
-//           scores: {math: 76, english: 79, science: 82}
-//         },
-//         {
-//           id: 's15',
-//           name: 'Tariq',
-//           scores: {math: 84, english: 77, science: 80}
-//         },
-//         {id: 's16', name: 'Hiba', scores: {math: 75, english: 74, science: 79}},
-//         {
-//           id: 's17',
-//           name: 'Salman',
-//           scores: {math: 79, english: 81, science: 86}
-//         },
-//         {id: 's18', name: 'Iqra', scores: {math: 73, english: 75, science: 78}},
-//         {
-//           id: 's19',
-//           name: 'Junaid',
-//           scores: {math: 70, english: 72, science: 75}
-//         },
-//         {id: 's20', name: 'Sadia', scores: {math: 85, english: 88, science: 90}}
-//       ]
-//     }
-//   ],
-//   subjects: ['math', 'english', 'science']
-// };
-
-// Helper function to flatten and enrich student data
 function getFlattenedStudentData(data: any) {
   const allStudents: any = [];
   data.classes.forEach((room: any) => {
@@ -142,109 +66,93 @@ function getFlattenedStudentData(data: any) {
   return allStudents;
 }
 
-import studentData from '@/data/dashboard.json';
+import {classData} from '@/data/classes';
 
-const initialStudentData = getFlattenedStudentData(studentData);
+const initialStudentData = getFlattenedStudentData(classData);
 
-// --- 3. Define Student-Specific Columns ---
 const studentColumns: ColumnDef<z.infer<typeof studentSchema>>[] = [
   {
     accessorKey: 'name',
-    header: () => {
-      return (
-        <Button className="text-left w-full justify-start" variant="ghost">
-          Student Name
-        </Button>
-      );
-    },
+    header: () => (
+      <Button className="text-left w-full justify-start" variant="ghost">
+        Student Name
+      </Button>
+    ),
     cell: ({row}) => (
       <div className="font-medium">
         {row.original.name} ({row.original.id})
       </div>
-    ),
-    filterFn: 'includesString' // Enable filtering by name
+    )
   },
   {
     accessorKey: 'roomName',
-    header: () => {
-      return (
-        <Button className="text-left w-full justify-start" variant="ghost">
-          Room
-        </Button>
-      );
-    }
+    header: () => (
+      <Button className="text-left w-full justify-start" variant="ghost">
+        Room
+      </Button>
+    )
   },
   {
     accessorKey: 'scores.math',
-    header: () => {
-      return (
-        <Button className="text-center w-full justify-center" variant="ghost">
-          Math
-        </Button>
-      );
-    },
+    header: () => (
+      <Button className="text-center w-full justify-center" variant="ghost">
+        Math
+      </Button>
+    ),
     cell: ({row}) => (
       <div className="text-center">{row.original.scores.math}</div>
     )
   },
   {
     accessorKey: 'scores.english',
-    header: () => {
-      return (
-        <Button className="text-center w-full justify-center" variant="ghost">
-          English
-        </Button>
-      );
-    },
+    header: () => (
+      <Button className="text-center w-full justify-center" variant="ghost">
+        English
+      </Button>
+    ),
     cell: ({row}) => (
       <div className="text-center">{row.original.scores.english}</div>
     )
   },
   {
     accessorKey: 'scores.science',
-    header: () => {
-      return (
-        <Button className="text-center w-full justify-center" variant="ghost">
-          Science
-        </Button>
-      );
-    },
+    header: () => (
+      <Button className="text-center w-full justify-center" variant="ghost">
+        Science
+      </Button>
+    ),
     cell: ({row}) => (
       <div className="text-center">{row.original.scores.science}</div>
     )
   },
   {
     accessorKey: 'totalScore',
-    header: ({column}) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="text-right w-full justify-end"
-        >
-          Total
-          <IconChevronDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({column}) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        className="text-right w-full justify-end"
+      >
+        Total
+        <IconChevronDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({row}) => (
       <div className="text-right font-semibold">{row.original.totalScore}</div>
     )
   },
   {
     accessorKey: 'averageScore',
-    header: ({column}) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          className="text-right w-full justify-end"
-        >
-          Average
-          <IconChevronDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({column}) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        className="text-right w-full justify-end"
+      >
+        Average
+        <IconChevronDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({row}) => (
       <div className="text-right font-semibold">
         {row.original.averageScore}
@@ -253,10 +161,15 @@ const studentColumns: ColumnDef<z.infer<typeof studentSchema>>[] = [
   }
 ];
 
-// --- 4. Simplified DataTable Component ---
 export function StudentDataTable() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState('');
+
+  function globalFilterFn(row: any, columnId: string, filterValue: string) {
+    const {name, id, roomName} = row.original;
+    const searchable = `${name} ${id} ${roomName}`.toLowerCase();
+    return searchable.includes(filterValue.toLowerCase());
+  }
 
   const table = useReactTable({
     data: initialStudentData,
@@ -264,12 +177,14 @@ export function StudentDataTable() {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
       globalFilter
     },
+    globalFilterFn: globalFilterFn,
     initialState: {
       pagination: {
         pageSize: 10
@@ -282,13 +197,11 @@ export function StudentDataTable() {
       <CardHeader>
         <CardTitle>Student Lists</CardTitle>
       </CardHeader>
-
       <CardContent>
-        {/* Search Input */}
         <div className="flex items-center py-4">
           <IconSearch className="h-5 w-5 text-muted-foreground mr-2" />
           <Input
-            placeholder="Search students by name..."
+            placeholder="Search students by name, id or room..."
             value={globalFilter ?? ''}
             onChange={(event) => setGlobalFilter(event.target.value)}
             className="max-w-sm"
@@ -300,18 +213,16 @@ export function StudentDataTable() {
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
+                  {headerGroup.headers.map((header) => (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  ))}
                 </TableRow>
               ))}
             </TableHeader>
@@ -346,7 +257,6 @@ export function StudentDataTable() {
           </Table>
         </div>
 
-        {/* Pagination Controls */}
         <div className="flex items-center justify-end space-x-2 py-4">
           <Button
             variant="outline"

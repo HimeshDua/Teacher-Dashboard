@@ -1,9 +1,19 @@
 'use client';
-
 import * as React from 'react';
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent
+} from '@/components/ui/chart';
 import {Area, AreaChart, CartesianGrid, XAxis} from 'recharts';
-
-import {useIsMobile} from '@/hooks/use-mobile';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
 import {
   Card,
   CardAction,
@@ -12,35 +22,9 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent
-} from '@/components/ui/chart';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
 import {ToggleGroup, ToggleGroupItem} from '@/components/ui/toggle-group';
-
-export const description = 'Class-wise academic progress';
-
-const chartData = [
-  {date: '2025-06-01', room201: 12, room202: 76},
-  {date: '2025-06-08', room201: 75, room202: 78},
-  {date: '2025-06-15', room201: 77, room202: 80},
-  {date: '2025-06-22', room201: 76, room202: 81},
-  {date: '2025-06-29', room201: 78, room202: 82},
-  {date: '2025-07-06', room201: 79, room202: 83},
-  {date: '2025-07-13', room201: 80, room202: 84},
-  {date: '2025-07-20', room201: 82, room202: 85},
-  {date: '2025-07-27', room201: 83, room202: 86},
-  {date: '2025-08-03', room201: 84, room202: 87}
-];
+import {useIsMobile} from '@/hooks/use-mobile';
+import {chartData} from '@/hooks/chart-data';
 
 const chartConfig = {
   room201: {
@@ -131,24 +115,24 @@ export function ChartAreaInteractive() {
               <linearGradient id="fillRoom201" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-room201)"
+                  stopColor="var(--chart-4)"
                   stopOpacity={1.0}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-room201)"
+                  stopColor="var(--chart-3)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
               <linearGradient id="fillRoom202" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-room202)"
+                  stopColor="var(--chart-1)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-room202)"
+                  stopColor="var(--chart-2)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
