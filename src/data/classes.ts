@@ -163,55 +163,55 @@ export const classData = {
         },
         {id: 's40', name: 'Hina', scores: {math: 77, english: 80, science: 82}}
       ]
+    },
+    {
+      id: 'room-205',
+      name: 'Room 205',
+      students: [
+        {id: 's41', name: 'Saad', scores: {math: 89, english: 87, science: 91}},
+        {
+          id: 's42',
+          name: 'Ayesha',
+          scores: {math: 75, english: 78, science: 80}
+        },
+        {
+          id: 's43',
+          name: 'Shahid',
+          scores: {math: 82, english: 84, science: 86}
+        },
+        {
+          id: 's44',
+          name: 'Mariam',
+          scores: {math: 70, english: 75, science: 72}
+        },
+        {
+          id: 's45',
+          name: 'Baber',
+          scores: {math: 93, english: 88, science: 95}
+        },
+        {
+          id: 's46',
+          name: 'Fozia',
+          scores: {math: 78, english: 82, science: 80}
+        },
+        {
+          id: 's47',
+          name: 'Nabeel',
+          scores: {math: 85, english: 80, science: 87}
+        },
+        {
+          id: 's48',
+          name: 'Tahira',
+          scores: {math: 81, english: 83, science: 84}
+        },
+        {
+          id: 's49',
+          name: 'Rafay',
+          scores: {math: 76, english: 79, science: 82}
+        },
+        {id: 's50', name: 'Saima', scores: {math: 88, english: 85, science: 90}}
+      ]
     }
-    // {
-    //   id: 'room-205',
-    //   name: 'Room 205',
-    //   students: [
-    //     {id: 's41', name: 'Saad', scores: {math: 89, english: 87, science: 91}},
-    //     {
-    //       id: 's42',
-    //       name: 'Ayesha',
-    //       scores: {math: 75, english: 78, science: 80}
-    //     },
-    //     {
-    //       id: 's43',
-    //       name: 'Shahid',
-    //       scores: {math: 82, english: 84, science: 86}
-    //     },
-    //     {
-    //       id: 's44',
-    //       name: 'Mariam',
-    //       scores: {math: 70, english: 75, science: 72}
-    //     },
-    //     {
-    //       id: 's45',
-    //       name: 'Baber',
-    //       scores: {math: 93, english: 88, science: 95}
-    //     },
-    //     {
-    //       id: 's46',
-    //       name: 'Fozia',
-    //       scores: {math: 78, english: 82, science: 80}
-    //     },
-    //     {
-    //       id: 's47',
-    //       name: 'Nabeel',
-    //       scores: {math: 85, english: 80, science: 87}
-    //     },
-    //     {
-    //       id: 's48',
-    //       name: 'Tahira',
-    //       scores: {math: 81, english: 83, science: 84}
-    //     },
-    //     {
-    //       id: 's49',
-    //       name: 'Rafay',
-    //       scores: {math: 76, english: 79, science: 82}
-    //     },
-    //     {id: 's50', name: 'Saima', scores: {math: 88, english: 85, science: 90}}
-    //   ]
-    // }
   ],
   subjects: ['math', 'english', 'science']
 };
