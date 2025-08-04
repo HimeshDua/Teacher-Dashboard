@@ -24,18 +24,48 @@ import {
 } from '@/components/ui/card';
 import {ToggleGroup, ToggleGroupItem} from '@/components/ui/toggle-group';
 import {useIsMobile} from '@/hooks/use-mobile';
-import {chartData} from '@/hooks/chart-data';
+import {classData} from '@/data/classes';
 
-const chartConfig = {
-  room201: {
-    label: 'Room 201 Avg',
-    color: 'var(--color-room201)'
-  },
-  room202: {
-    label: 'Room 202 Avg',
-    color: 'var(--color-room202)'
+const generateChartData = () => {
+  const data = [];
+  const today = new Date();
+  const daysToGenerate = 90;
+
+  for (let i = daysToGenerate; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(today.getDate() - i);
+    const item: any = {
+      date: date.toISOString().split('T')[0]
+    };
+    classData.classes.forEach((classroom) => {
+      const roomKey = `room${classroom.id.split('-')[1]}`;
+      const randomScore = Math.floor(Math.random() * (90 - 60 + 1)) + 60;
+      item[roomKey] = randomScore;
+    });
+    data.push(item);
   }
-} satisfies ChartConfig;
+  return data;
+};
+
+const chartData = generateChartData();
+
+// This function dynamically generates the chart configuration object.
+const generateChartConfig = () => {
+  const config: ChartConfig = {};
+
+  classData.classes.forEach((classroom, index) => {
+    // Extract the room number from the id (e.g., 'room-201' -> '201')
+    const roomKey = `room${classroom.id.split('-')[1]}`;
+    config[roomKey] = {
+      label: `${classroom.name} Avg`,
+      color: `var(--chart-${index + 1})`
+    };
+  });
+
+  return config;
+};
+
+const chartConfig = generateChartConfig();
 
 export function ChartAreaInteractive() {
   const isMobile = useIsMobile();
@@ -47,19 +77,68 @@ export function ChartAreaInteractive() {
     }
   }, [isMobile]);
 
-  const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date);
-    const referenceDate = new Date('2025-08-03');
-    let daysToSubtract = 90;
-    if (timeRange === '30d') {
-      daysToSubtract = 30;
-    } else if (timeRange === '7d') {
-      daysToSubtract = 7;
-    }
-    const startDate = new Date(referenceDate);
-    startDate.setDate(startDate.getDate() - daysToSubtract);
-    return date >= startDate;
-  });
+  const filteredData = React.useMemo(() => {
+    return chartData.filter((item) => {
+      const date = new Date(item.date);
+      const referenceDate = new Date('2025-08-03');
+      let daysToSubtract = 90;
+      if (timeRange === '30d') {
+        daysToSubtract = 30;
+      } else if (timeRange === '7d') {
+        daysToSubtract = 7;
+      }
+      const startDate = new Date(referenceDate);
+      startDate.setDate(startDate.getDate() - daysToSubtract);
+      return date >= startDate;
+    });
+  }, [timeRange]);
+
+  const renderGradientDefs = () => {
+    return (
+      <defs>
+        {classData.classes.map((classroom, index) => {
+          const roomKey = `room${classroom.id.split('-')[1]}`;
+          return (
+            <linearGradient
+              key={roomKey}
+              id={`fill${roomKey}`}
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <stop
+                offset="5%"
+                stopColor={`var(--chart-${index + 1})`}
+                stopOpacity={0.8}
+              />
+              <stop
+                offset="95%"
+                stopColor={`var(--chart-${index + 1})`}
+                stopOpacity={0.1}
+              />
+            </linearGradient>
+          );
+        })}
+      </defs>
+    );
+  };
+
+  const renderAreaComponents = () => {
+    return classData.classes.map((classroom, index) => {
+      const roomKey = `room${classroom.id.split('-')[1]}`;
+      return (
+        <Area
+          key={roomKey}
+          dataKey={roomKey}
+          type="natural"
+          fill={`url(#fill${roomKey})`}
+          stroke={`var(--color-${roomKey})`}
+          stackId="a"
+        />
+      );
+    });
+  };
 
   return (
     <Card className="@container/card">
@@ -111,32 +190,7 @@ export function ChartAreaInteractive() {
           className="aspect-auto h-[250px] w-full"
         >
           <AreaChart data={filteredData}>
-            <defs>
-              <linearGradient id="fillRoom201" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--chart-4)"
-                  stopOpacity={1.0}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--chart-3)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillRoom202" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--chart-1)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--chart-2)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-            </defs>
+            {renderGradientDefs()}
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
@@ -166,20 +220,7 @@ export function ChartAreaInteractive() {
                 />
               }
             />
-            <Area
-              dataKey="room201"
-              type="natural"
-              fill="url(#fillRoom201)"
-              stroke="var(--color-room201)"
-              stackId="a"
-            />
-            <Area
-              dataKey="room202"
-              type="natural"
-              fill="url(#fillRoom202)"
-              stroke="var(--color-room202)"
-              stackId="a"
-            />
+            {renderAreaComponents()}
           </AreaChart>
         </ChartContainer>
       </CardContent>
